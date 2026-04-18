@@ -5,7 +5,7 @@ import PyPDF2
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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"
+    api_key="your_new_key_here"
 )
 
 def extract_text_from_pdf(uploaded_file):

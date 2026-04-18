@@ -1,53 +1,39 @@
-# utils.py
-
 from openai import OpenAI
 import PyPDF2
+import os
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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"
+    api_key=os.getenv("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")
 )
 
-def extract_text_from_pdf(uploaded_file):
+def extract_text_from_pdf(file):
+    pdf_reader = PyPDF2.PdfReader(file)
     text = ""
-    pdf_reader = PyPDF2.PdfReader(uploaded_file)
-
     for page in pdf_reader.pages:
-        text += page.extract_text() or ""
-
+        text += page.extract_text()
     return text
 
 
 def analyze_resume(resume_text, job_desc):
     prompt = f"""
-You are an ATS system.
+    Compare the resume with the job description.
 
-Compare the resume with the job description.
+    Resume:
+    {resume_text}
 
-Resume:
-{resume_text}
+    Job Description:
+    {job_desc}
 
-Job Description:
-{job_desc}
+    Give:
+    - Match score
+    - Missing skills
+    - Suggestions
+    """
 
-Give:
-1. Match Percentage
-2. Missing Skills
-3. Improvement Suggestions
-4. Final Verdict
-"""
+    response = client.chat.completions.create(
+        model="openai/gpt-3.5-turbo",   # safe working model
+        messages=[{"role": "user", "content": prompt}]
+    )
 
-    try:
-        response = client.chat.completions.create(
-            model="openrouter/auto",   # 🔥 FINAL FIX
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.7,
-            max_tokens=800
-        )
-
-        return response.choices[0].message.content
-
-    except Exception as e:
-        return f"API Error: {str(e)}"
+    return response.choices[0].message.content

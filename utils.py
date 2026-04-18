@@ -4,7 +4,7 @@ import os
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("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")
+    api_key=os.getenv("OPENROUTER_API_KEY")
 )
 
 def extract_text_from_pdf(file):

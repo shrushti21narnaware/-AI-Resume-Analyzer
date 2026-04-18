@@ -55,7 +55,7 @@ streamlit run app.py
 
  🌐 Live Demo
 
-👉 (Add your deployed link here after hosting)
+👉 (https://hbprf37mxd5tcmrzrfrzsn.streamlit.app/)
 
  📊 How It Works
 
